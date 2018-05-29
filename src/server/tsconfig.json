@@ -1,7 +1,8 @@
 {
+  "compileOnSave": true,
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "build/dist",
+    "outDir": "../../build/dist",
     "module": "commonjs",
     "target": "es5",
     "lib": ["es7", "dom"],
@@ -18,14 +19,6 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true
   },
-  "include": ["src/client"],
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
-    "src/setupTests.ts"
-  ]
+  "include": ["*"],
+  "exclude": ["node_modules"]
 }
