@@ -1,4 +1,3 @@
-import * as React from 'react';
 import styled, { StyledFunction } from 'styled-components';
 
 interface CardContent {
@@ -83,10 +82,10 @@ interface Props {
   readonly suit: string;
   readonly rank: number;
   readonly onClick?: () => void;
+  readonly isFaceDown?: boolean;
 }
 
-const styledCard: StyledFunction<Props & React.HTMLAttributes<HTMLDivElement>> =
-  styled.div;
+const styledCard: StyledFunction<Props> = styled.div;
 
 const StyledCard = styledCard`
   font-size: 7rem;
@@ -94,7 +93,8 @@ const StyledCard = styledCard`
   height: 7rem;
   line-height: 7rem;
   &:before {
-    content: '${props => cardContent[props.suit][props.rank]}'
+    content: '${props =>
+      !props.isFaceDown ? cardContent[props.suit][props.rank] : '\\1F0A0'}'
   }
 `;
 
