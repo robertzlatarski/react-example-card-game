@@ -1,22 +1,26 @@
 import styled, { StyledFunction } from 'styled-components';
+import { CardSuits, FaceDown } from '../models/snap';
 
 interface CardContent {
-  readonly spades: {
+  readonly [CardSuits.Spades]: {
     [rank: number]: string;
   };
-  readonly hearts: {
+  readonly [CardSuits.Hearts]: {
     [rank: number]: string;
   };
-  readonly diamonds: {
+  readonly [CardSuits.Diamonds]: {
     [rank: number]: string;
   };
-  readonly clubs: {
+  readonly [CardSuits.Clubs]: {
     [rank: number]: string;
+  };
+  readonly [FaceDown]: {
+    0: string;
   };
 }
 
 const cardContent: CardContent = {
-  spades: {
+  [CardSuits.Spades]: {
     2: '\\1F0A2',
     3: '\\1F0A3',
     4: '\\1F0A4',
@@ -31,7 +35,7 @@ const cardContent: CardContent = {
     13: '\\1F0AD',
     14: '\\1F0A1',
   },
-  hearts: {
+  [CardSuits.Hearts]: {
     2: '\\1F0B2',
     3: '\\1F0B3',
     4: '\\1F0B4',
@@ -46,7 +50,7 @@ const cardContent: CardContent = {
     13: '\\1F0BD',
     14: '\\1F0B1',
   },
-  diamonds: {
+  [CardSuits.Diamonds]: {
     2: '\\1F0C2',
     3: '\\1F0C3',
     4: '\\1F0C4',
@@ -61,7 +65,7 @@ const cardContent: CardContent = {
     13: '\\1F0CD',
     14: '\\1F0C1',
   },
-  clubs: {
+  [CardSuits.Clubs]: {
     2: '\\1F0D2',
     3: '\\1F0D3',
     4: '\\1F0D4',
@@ -76,26 +80,24 @@ const cardContent: CardContent = {
     13: '\\1F0DD',
     14: '\\1F0D1',
   },
+  [FaceDown]: {
+    0: '\\1F0A0',
+  },
 };
 
 interface Props {
   readonly suit: string;
   readonly rank: number;
   readonly onClick?: () => void;
-  readonly isFaceDown?: boolean;
 }
 
 const styledCard: StyledFunction<Props> = styled.div;
 
-const StyledCard = styledCard`
+const Card = styledCard`
   font-size: 7rem;
-  width: 7rem;
-  height: 7rem;
-  line-height: 7rem;
   &:before {
-    content: '${props =>
-      !props.isFaceDown ? cardContent[props.suit][props.rank] : '\\1F0A0'}'
+    content: '${props => cardContent[props.suit][props.rank]}'
   }
 `;
 
-export default StyledCard;
+export default Card;
