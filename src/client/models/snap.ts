@@ -1,31 +1,33 @@
 export interface Card {
-  readonly suit: number;
+  readonly suit: CardSuits;
   readonly rank: number;
 }
 
-type Deck = Card[];
+export type Deck = Card[];
 
-const cardSuits = {
-  1: 'spades',
-  2: 'hearts',
-  3: 'diamonds',
-  4: 'clubs',
-};
+export enum CardSuits {
+  Spades = 'Spades',
+  Hearts = 'Hearts',
+  Diamonds = 'Diamonds',
+  Clubs = 'Clubs',
+}
+
+export const FaceDown = 'FaceDown';
 
 const cardRanks = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
-const generateCard = (suit: number, rank: number): Card => ({ suit, rank });
+const generateCard = (suit: CardSuits, rank: number): Card => ({ suit, rank });
 
 export const generateDeck = (size: number = 52): Deck => {
-  const cardsPerSuit = Math.ceil(size / Object.keys(cardSuits).length);
+  const cardsPerSuit = Math.ceil(size / Object.keys(CardSuits).length);
 
   const deck: Deck = [];
 
   const ranks = cardRanks.slice(0, cardsPerSuit);
 
   ranks.forEach(rank => {
-    Object.keys(cardSuits).forEach(suit => {
-      deck.push(generateCard(Number(suit), rank));
+    Object.keys(CardSuits).forEach(suit => {
+      deck.push(generateCard(CardSuits[suit], rank));
     });
   });
 
@@ -54,3 +56,6 @@ export const shuffle = (deck: Deck): Deck => {
 
 export const isSnapValid = (deck: Deck, deck2: Deck): boolean =>
   deck.some(card => deck2.some(card2 => card.rank === card2.rank));
+
+export const isGameOver = (deck?: Deck, pool?: Deck): boolean =>
+  !!deck && deck.length === 0 && !!pool && pool.length === 0;

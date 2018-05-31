@@ -1,4 +1,10 @@
-import { generateDeck, randomNumber, Card, isSnapValid } from './snap';
+import {
+  generateDeck,
+  randomNumber,
+  Card,
+  isSnapValid,
+  CardSuits,
+} from './snap';
 
 describe('snap', () => {
   describe('generateDeck', () => {
@@ -11,7 +17,7 @@ describe('snap', () => {
     it('should return a deck containing Card objects', () => {
       const card = deck[0];
       const mockCard: Card = {
-        suit: expect.any(Number),
+        suit: expect.any(String),
         rank: expect.any(Number),
       };
 
@@ -46,15 +52,15 @@ describe('snap', () => {
   describe('isSnapValid', () => {
     it('should return true if 2 decks share common card', () => {
       const deck = [
-        { suit: 1, rank: 1 },
-        { suit: 2, rank: 1 },
-        { suit: 3, rank: 1 },
+        { suit: CardSuits.Clubs, rank: 1 },
+        { suit: CardSuits.Diamonds, rank: 1 },
+        { suit: CardSuits.Hearts, rank: 1 },
       ];
 
       const deck1 = [
-        { suit: 1, rank: 2 },
-        { suit: 2, rank: 3 },
-        { suit: 3, rank: 1 },
+        { suit: CardSuits.Clubs, rank: 2 },
+        { suit: CardSuits.Diamonds, rank: 3 },
+        { suit: CardSuits.Hearts, rank: 1 },
       ];
 
       expect(isSnapValid(deck, deck1)).toBe(true);
@@ -62,15 +68,15 @@ describe('snap', () => {
 
     it('should return false if 2 decks do not share common card', () => {
       const deck = [
-        { suit: 1, rank: 1 },
-        { suit: 2, rank: 1 },
-        { suit: 3, rank: 1 },
+        { suit: CardSuits.Clubs, rank: 1 },
+        { suit: CardSuits.Diamonds, rank: 1 },
+        { suit: CardSuits.Hearts, rank: 1 },
       ];
 
       const deck1 = [
-        { suit: 1, rank: 2 },
-        { suit: 2, rank: 3 },
-        { suit: 3, rank: 4 },
+        { suit: CardSuits.Clubs, rank: 2 },
+        { suit: CardSuits.Diamonds, rank: 3 },
+        { suit: CardSuits.Hearts, rank: 4 },
       ];
 
       expect(isSnapValid(deck, deck1)).toBe(false);
