@@ -14,11 +14,9 @@
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "compile-server":
-      "rm -rf build/dist && tsc --project src/server/tsconfig.json",
+    "compile-server": "rm -rf build/dist && tsc --project src/server/tsconfig.json",
     "watch-server": "npm run compile-server  -- --watch",
-    "start-server":
-      "npm run compile-server && nodemon build/dist/server/server.js"
+    "start-server": "npm run compile-server && nodemon build/dist/server/server.js"
   },
   "devDependencies": {
     "@types/express": "^4.11.1",
