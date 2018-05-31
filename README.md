@@ -9,6 +9,8 @@ To start a game press: Start. You can reset the game anytime, by pressing Reset.
 To draw a card, each player can click on his deck (or press `a` hotkey a for player1 and `k` for player2).
 Player can click `Snap!` (or press `s` hotkey a for player1 and `l` for player2) anytime, when he sees 2 cards of the same rank in the pool. This makes the player a winner of the pool and it goes to the bottom of his deck. If a player clicks `Snap!` and no cards are of the same rank, the pool is automatically transferred to the other player.
 
+![img](https://github.com/robertzlatarski/react-example-card-game/blob/master/game-screenshot.png)
+
 ## How to launch
 
 run:
