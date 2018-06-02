@@ -2,8 +2,8 @@ import * as React from 'react';
 import { shallow, configure, mount } from 'enzyme';
 import Button from './Button';
 import PlayerDeck from './PlayerDeck';
-import { Players } from '../App';
 import Card from './Card';
+import { Players } from '../models/snap';
 
 const Adapter = require('enzyme-adapter-react-16');
 configure({ adapter: new Adapter() });
@@ -34,6 +34,7 @@ describe('PlayerDeck', () => {
     expect(wrapper.find(Card)).toHaveLength(1);
     expect(wrapper.text().includes(props.numberOfCards.toString())).toBe(true);
     expect(wrapper.text().includes('Your turn!')).toBe(true);
+    expect(wrapper.text().includes(Players.Player1)).toBe(true);
   });
 
   it('should not render text', () => {

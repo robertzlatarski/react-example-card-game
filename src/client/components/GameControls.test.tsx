@@ -25,9 +25,17 @@ describe('GameControls', () => {
   });
 
   it('should render components', () => {
-    const wrapper = shallow(<GameControls {...props} />);
+    const wrapper = mount(<GameControls {...props} />);
 
     expect(wrapper.find(Button)).toHaveLength(1);
+    expect(wrapper.find('input')).toHaveLength(1);
+    expect(wrapper.text().includes('Start')).toBe(true);
+  });
+
+  it('should render different text for button, depending on game state', () => {
+    const wrapper = mount(<GameControls {...props} isStarted={true} />);
+
+    expect(wrapper.text().includes('Reset')).toBe(true);
   });
 
   it('should call functions', () => {

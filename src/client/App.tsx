@@ -5,24 +5,16 @@ import GameWrapper from './components/GameWrapper';
 import GameControls from './components/GameControls';
 import CardPool from './components/CardPool';
 import {
-  Deck,
   generateDeck,
   shuffle,
-  isSnapValid,
   isGameOver,
+  doSnap,
+  splitDeck,
+  Players,
+  Player,
 } from './models/snap';
 
-export enum Players {
-  Player1 = 'Robert',
-  Player2 = 'Dani',
-}
-
-interface Player {
-  readonly deck?: Deck;
-  readonly pool?: Deck;
-}
-
-interface StateProps {
+export interface StateProps {
   readonly isStarted: boolean;
   readonly winner?: Players;
   readonly numberOfCards?: number;
@@ -63,8 +55,8 @@ class App extends React.Component<{}, StateProps> {
 
   checkEndGame = (state: StateProps) => {
     const {
-      player1: { pool: player1Pool, deck: player1Deck },
-      player2: { pool: player2Pool, deck: player2Deck },
+      player1: { pool: player1Pool = [], deck: player1Deck = [] },
+      player2: { pool: player2Pool = [], deck: player2Deck = [] },
     } = state;
 
     if (isGameOver(player1Pool, player1Deck)) {
@@ -76,68 +68,16 @@ class App extends React.Component<{}, StateProps> {
     }
   };
 
-  player1CollectPool = (player1: Player, player2: Player) => {
-    const { pool: player1Pool = [], deck: player1Deck = [] } = player1;
-    const { pool: player2Pool = [] } = player2;
-
-    this.setState({
-      player1: {
-        deck: [...(player1Deck || []), ...player2Pool, ...player1Pool],
-        pool: [],
-      },
-      player2: {
-        ...player2,
-        pool: [],
-      },
-    });
-  };
-
-  player2CollectPool = (player1: Player, player2: Player) => {
-    const { pool: player1Pool = [] } = player1;
-    const { pool: player2Pool = [], deck: player2Deck = [] } = player2;
-
-    this.setState({
-      player2: {
-        deck: [...player2Deck, ...player2Pool, ...player1Pool],
-        pool: [],
-      },
-      player1: {
-        ...player1,
-        pool: [],
-      },
-    });
-  };
-
   onSnapClick = (player: Players) => {
-    const {
-      player1: { pool: player1Pool },
-      player2: { pool: player2Pool },
-      player1,
-      player2,
-    } = this.state;
+    const { player1, player2 } = this.state;
 
-    if (!player1Pool || !player2Pool) {
+    if (!player1.pool || !player2.pool) {
       return;
     }
 
-    if (!isSnapValid(player1Pool, player2Pool)) {
-      if (player === Players.Player1) {
-        this.player2CollectPool(player1, player2);
-      }
-      if (player === Players.Player2) {
-        this.player1CollectPool(player1, player2);
-      }
+    const newState = doSnap(player, player1, player2);
 
-      return;
-    }
-
-    if (player === Players.Player1) {
-      this.player1CollectPool(player1, player2);
-    }
-
-    if (player === Players.Player2) {
-      this.player2CollectPool(player1, player2);
-    }
+    this.setState(newState as any);
   };
 
   changeTurn = () => {
@@ -146,48 +86,42 @@ class App extends React.Component<{}, StateProps> {
     }));
   };
 
+  drawCard = (playerTriggered: Players) => {
+    if (this.state.turn !== playerTriggered) {
+      return;
+    }
+
+    const playerKey =
+      playerTriggered === Players.Player1 ? 'player1' : 'player2';
+
+    const player = this.state[playerKey];
+    const deck = player.deck || [];
+
+    if (deck.length === 0) {
+      // Player does not have any cards left in the deck, change turn.
+      this.changeTurn();
+      return;
+    }
+
+    const drawnCard = deck.shift()!;
+    const pool = player.pool || [];
+
+    this.setState({
+      [playerKey]: {
+        ...player,
+        pool: [...pool, drawnCard],
+      },
+    } as any);
+
+    this.changeTurn();
+  };
+
   onDeckClick = (player: Players) => {
     if (!this.state.isStarted) {
       return;
     }
 
-    if (player === Players.Player1 && this.state.turn === Players.Player1) {
-      if (this.state.player1.deck && this.state.player1.deck.length === 0) {
-        this.changeTurn();
-        return;
-      }
-
-      const { pool = [], deck } = this.state.player1;
-      const card = deck!.shift()!;
-
-      this.setState({
-        player1: {
-          pool: [...pool, card],
-          deck,
-        },
-      });
-
-      this.changeTurn();
-    }
-
-    if (player === Players.Player2 && this.state.turn === Players.Player2) {
-      if (this.state.player2.deck && this.state.player2.deck.length === 0) {
-        this.changeTurn();
-        return;
-      }
-
-      const { pool = [], deck } = this.state.player2;
-      const card = deck!.shift()!;
-
-      this.setState({
-        player2: {
-          pool: [...pool, card],
-          deck,
-        },
-      });
-
-      this.changeTurn();
-    }
+    this.drawCard(player);
   };
 
   onStartResetClick = () => {
@@ -197,11 +131,7 @@ class App extends React.Component<{}, StateProps> {
     }
 
     const allCards = shuffle(generateDeck(this.state.numberOfCards));
-    const allCardsLength = allCards.length;
-    const halfDeckSize = Math.ceil(allCardsLength / 2);
-
-    const player1Deck = allCards.slice(0, halfDeckSize);
-    const player2Deck = allCards.slice(halfDeckSize, allCardsLength);
+    const [player1Deck, player2Deck] = splitDeck(allCards, 2);
 
     this.setState({
       isStarted: true,

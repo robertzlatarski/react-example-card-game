@@ -2,8 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import Button from './Button';
 import Card from './Card';
-import { FaceDown } from '../models/snap';
-import { Players } from '../App';
+import { FaceDown, Players } from '../models/snap';
 
 interface Props {
   readonly onSnapClick: (player: Players) => void;

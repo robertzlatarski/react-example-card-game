@@ -1,3 +1,5 @@
+import { StateProps } from '../App';
+
 export interface Card {
   readonly suit: CardSuits;
   readonly rank: number;
@@ -10,6 +12,16 @@ export enum CardSuits {
   Hearts = 'Hearts',
   Diamonds = 'Diamonds',
   Clubs = 'Clubs',
+}
+
+export enum Players {
+  Player1 = 'Robert',
+  Player2 = 'Dani',
+}
+
+export interface Player {
+  readonly deck?: Deck;
+  readonly pool?: Deck;
 }
 
 export const FaceDown = 'FaceDown';
@@ -57,5 +69,59 @@ export const shuffle = (deck: Deck): Deck => {
 export const isSnapValid = (deck: Deck, deck2: Deck): boolean =>
   deck.some(card => deck2.some(card2 => card.rank === card2.rank));
 
-export const isGameOver = (deck?: Deck, pool?: Deck): boolean =>
+export const isGameOver = (deck: Deck, pool: Deck): boolean =>
   !!deck && deck.length === 0 && !!pool && pool.length === 0;
+
+export const splitDeck = (deck: Deck, splitBy: number) => {
+  const allCardsLength = deck.length;
+  const deckPartSize = Math.ceil(allCardsLength / splitBy);
+
+  const decks = [];
+
+  for (let i = 0; i < allCardsLength; i += deckPartSize) {
+    const deckPart = deck.slice(i, i + deckPartSize);
+    decks.push(deckPart);
+  }
+  return decks;
+};
+
+export const doSnap = (
+  playerTriggered: Players,
+  player1: Player,
+  player2: Player
+): Partial<StateProps> => {
+  const player1Pool = player1.pool || [];
+  const player2Pool = player2.pool || [];
+  const pool = [...player1Pool, ...player2Pool];
+
+  let winnerName: string;
+  let winnerDeck: Deck;
+  let looserName: string;
+  let looser: Player;
+
+  if (
+    playerTriggered === Players.Player1 &&
+    isSnapValid(player1Pool, player2Pool)
+  ) {
+    winnerName = 'player1';
+    winnerDeck = player1.deck || [];
+    looserName = 'player2';
+    looser = player2;
+  } else {
+    winnerName = 'player2';
+    winnerDeck = player2.deck || [];
+    looserName = 'player1';
+    looser = player1;
+  }
+
+  return {
+    [winnerName]: {
+      deck: [...winnerDeck, ...pool],
+      pool: [],
+    },
+    [looserName]: {
+      ...looser,
+      pool: [],
+    },
+  };
+};
