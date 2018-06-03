@@ -4,9 +4,10 @@ interface Props {
   readonly body: string;
   readonly title: string;
   readonly scripts: string[];
+  readonly styles: string;
 }
 
-const Html: React.SFC<Props> = ({ body, title, scripts }) => (
+const Html: React.SFC<Props> = ({ body, title, scripts, styles }) => (
   <html lang="en">
     <head>
       <meta charSet="utf-8" />
@@ -19,6 +20,7 @@ const Html: React.SFC<Props> = ({ body, title, scripts }) => (
       <title>{title}</title>
     </head>
     <body>
+      <div dangerouslySetInnerHTML={{ __html: styles }} />
       <div
         id="root"
         dangerouslySetInnerHTML={{

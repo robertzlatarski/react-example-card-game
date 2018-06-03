@@ -13,5 +13,5 @@ router.use('/static', Express.static(path.join(__dirname, '../../static')));
 server.use(router);
 
 server.listen(port, () => {
-  console.log('Server listening');
+  console.log('Server listening on:', port);
 });

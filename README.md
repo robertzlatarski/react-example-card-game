@@ -19,6 +19,20 @@ run:
 
 App runs on port `:3000`
 
+If you want to run it with SSR enabled:
+`npm install`
+`npm run build`
+`npm run compile-server`
+`npm run start-server`
+
+App runs on port `:3001`
+
+## Things left to do/consider
+
+Consider using Redux for state management and extract logic from App.tsx.
+Add option for dynamically adding/removing players.
+Improve Server Sider Rendering and its build process and eject app to configure webpack.
+
 ## Available scripts
 
 ### `npm start`
@@ -54,4 +68,4 @@ Compiles server and watches for changes.
 
 ### `npm run start-server`
 
-After server is compiled, starts the server on port 3001. Used for SSR. Still in progress.
+After server is compiled and client is built, you can start the server with this command on port 3001. Used for SSR.
