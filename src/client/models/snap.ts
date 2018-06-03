@@ -74,7 +74,7 @@ export const isGameOver = (deck: Deck, pool: Deck): boolean =>
 
 export const splitDeck = (deck: Deck, splitBy: number) => {
   const allCardsLength = deck.length;
-  const deckPartSize = Math.ceil(allCardsLength / splitBy);
+  const deckPartSize = allCardsLength / splitBy;
 
   const decks = [];
 
@@ -100,8 +100,10 @@ export const doSnap = (
   let looser: Player;
 
   if (
-    playerTriggered === Players.Player1 &&
-    isSnapValid(player1Pool, player2Pool)
+    (playerTriggered === Players.Player1 &&
+      isSnapValid(player1Pool, player2Pool)) ||
+    (playerTriggered === Players.Player2 &&
+      !isSnapValid(player1Pool, player2Pool))
   ) {
     winnerName = 'player1';
     winnerDeck = player1.deck || [];

@@ -26,7 +26,7 @@ export interface StateProps {
   readonly turn: Players;
 }
 
-const initialState: StateProps = {
+export const initialState: StateProps = {
   isStarted: false,
   numberOfCards: 12,
   player1: {},
@@ -95,7 +95,7 @@ class App extends React.Component<{}, StateProps> {
       playerTriggered === Players.Player1 ? 'player1' : 'player2';
 
     const player = this.state[playerKey];
-    const deck = player.deck || [];
+    const deck = [...(player.deck || [])];
 
     if (deck.length === 0) {
       // Player does not have any cards left in the deck, change turn.
@@ -108,7 +108,7 @@ class App extends React.Component<{}, StateProps> {
 
     this.setState({
       [playerKey]: {
-        ...player,
+        deck,
         pool: [...pool, drawnCard],
       },
     } as any);
