@@ -1,12 +1,19 @@
 # Snap Game
 
 A simple and fun card game, written in React and TypeScript.
+
 Project is based on create-react-app.
+
 Rules:
+
 2 Players game.
+
 Select the desired number of cards to play with.
+
 To start a game press: Start. You can reset the game anytime, by pressing Reset.
+
 To draw a card, each player can click on his deck (or press `a` hotkey a for player1 and `k` for player2).
+
 Player can click `Snap!` (or press `s` hotkey a for player1 and `l` for player2) anytime, when he sees 2 cards of the same rank in the pool. This makes the player a winner of the pool and it goes to the bottom of his deck. If a player clicks `Snap!` and no cards are of the same rank, the pool is automatically transferred to the other player.
 
 ![img](https://github.com/robertzlatarski/react-example-card-game/blob/master/game-screenshot.png)
@@ -14,15 +21,21 @@ Player can click `Snap!` (or press `s` hotkey a for player1 and `l` for player2)
 ## How to launch
 
 run:
+
 `npm install`
+
 `npm start`
 
 App runs on port `:3000`
 
 If you want to run it with SSR enabled:
+
 `npm install`
+
 `npm run build`
+
 `npm run compile-server`
+
 `npm run start-server`
 
 App runs on port `:3001`
@@ -30,7 +43,9 @@ App runs on port `:3001`
 ## Things left to do/consider
 
 Consider using Redux for state management and extract logic from App.tsx.
+
 Add option for dynamically adding/removing players.
+
 Improve Server Sider Rendering and its build process and eject app to configure webpack.
 
 ## Available scripts
